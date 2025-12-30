@@ -17,6 +17,7 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--studio-dark);
             color: #f8f8f8;
+            margin: 0;
             scroll-behavior: smooth;
         }
 
@@ -28,17 +29,31 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .day-cell.selected-day {
-            background-color: var(--studio-gold);
-            color: black;
-            font-weight: 700;
+        /* Calendar Fixes */
+        .day-cell {
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.875rem;
+            transition: all 0.2s;
         }
 
+        .day-cell.selected-day {
+            background-color: var(--studio-gold) !important;
+            color: black !important;
+            font-weight: 700;
+            border-color: var(--studio-gold);
+        }
+
+        /* Admin Modal Fixes */
         #admin-modal {
-            display: none;
+            display: none; /* Hidden by default */
             position: fixed;
             inset: 0;
-            z-index: 100;
+            z-index: 9999;
             background: #000;
             padding: 1.5rem;
             overflow-y: auto;
@@ -68,14 +83,14 @@
                 <div class="glass p-8 rounded-3xl">
                     <input type="password" id="admin-pw" class="w-full p-4 rounded-xl mb-4 outline-none focus:border-[#D4AF37]" placeholder="Password">
                     <button onclick="verifyAdmin()" class="w-full py-4 bg-[#D4AF37] text-black font-bold uppercase tracking-widest rounded-xl transition-transform active:scale-95">Unlock</button>
-                    <button onclick="document.getElementById('admin-modal').style.display='none'" class="mt-6 text-white/30 text-xs uppercase tracking-widest">Back to Site</button>
+                    <button onclick="closeAdmin()" class="mt-6 text-white/30 text-xs uppercase tracking-widest block w-full">Back to Site</button>
                 </div>
             </div>
 
             <div id="admin-content" class="hidden">
                 <div class="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
-                    <h2 class="serif text-4xl text-[#D4AF37]">Active Bookings</h2>
-                    <button onclick="document.getElementById('admin-modal').style.display='none'" class="text-white/40 text-[10px] uppercase">Close</button>
+                    <h2 class="serif text-4xl text-[#D4AF37]">Bookings</h2>
+                    <button onclick="closeAdmin()" class="text-white/40 text-[10px] uppercase">Close</button>
                 </div>
                 <div id="admin-bookings-list" class="space-y-4"></div>
             </div>
@@ -84,46 +99,48 @@
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 px-6 py-4 flex justify-between items-center glass">
-        <a href="#" class="serif text-xl font-bold tracking-widest">ABODI <span class="text-[#D4AF37]">BLENDZZ</span></a>
+        <a href="#" class="serif text-xl font-bold tracking-widest uppercase">ABODI <span class="text-[#D4AF37]">BLENDZZ</span></a>
         <a href="#book" class="bg-white text-black px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest active:scale-90 transition">Book Now</a>
     </nav>
 
     <!-- Hero -->
-    <header class="h-[90vh] flex flex-col items-center justify-center text-center px-6 hero-bg">
+    <header class="h-[80vh] flex flex-col items-center justify-center text-center px-6 hero-bg">
         <h2 class="serif italic text-2xl mb-2 text-[#D4AF37]">Master Barbering</h2>
-        <h1 class="serif text-6xl md:text-9xl font-bold tracking-tighter mb-8 uppercase">Abodi <br class="md:hidden"> Blendzz</h1>
+        <h1 class="serif text-6xl md:text-9xl font-bold tracking-tighter mb-8 uppercase leading-none">Abodi <br> Blendzz</h1>
         <div class="w-16 h-[1px] bg-[#D4AF37] mb-8"></div>
         <p class="max-w-md text-white/50 text-xs leading-relaxed uppercase tracking-[0.3em]">Precision fades & detailed architecture.</p>
-        <a href="#book" class="mt-12 px-10 py-4 border border-white/20 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition duration-500">Secure Reservation</a>
     </header>
 
     <!-- Booking Engine -->
     <section id="book" class="py-24 px-6">
         <div class="max-w-2xl mx-auto">
-            <div class="glass p-8 md:p-12 rounded-[2.5rem]">
-                <div class="text-center mb-12">
-                    <h2 class="serif text-4xl mb-2 text-[#D4AF37]">The Studio Calendar</h2>
-                    <p class="text-[10px] uppercase tracking-[0.3em] text-white/40">Select a date to begin</p>
+            <div class="glass p-6 md:p-12 rounded-[2.5rem]">
+                <div class="text-center mb-10">
+                    <h2 class="serif text-4xl mb-2 text-[#D4AF37]">Schedule</h2>
+                    <p class="text-[10px] uppercase tracking-[0.3em] text-white/40">Select a date and time</p>
                 </div>
 
                 <div id="booking-app">
                     <div class="flex justify-between items-center mb-6 px-2">
-                        <button onclick="changeMonth(-1)" class="p-2 opacity-50 hover:opacity-100 transition text-xl">←</button>
-                        <h3 id="monthLabel" class="serif text-2xl italic"></h3>
-                        <button onclick="changeMonth(1)" class="p-2 opacity-50 hover:opacity-100 transition text-xl">→</button>
+                        <button onclick="changeMonth(-1)" class="p-2 text-[#D4AF37] font-bold">←</button>
+                        <h3 id="monthLabel" class="serif text-xl italic text-white"></h3>
+                        <button onclick="changeMonth(1)" class="p-2 text-[#D4AF37] font-bold">→</button>
                     </div>
                     
                     <div class="grid grid-cols-7 gap-2 mb-4 text-center text-[10px] text-white/20 uppercase font-bold">
                         <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
                     </div>
-                    <div id="calendar" class="grid grid-cols-7 gap-2 mb-12"></div>
+                    <!-- Calendar Grid -->
+                    <div id="calendar" class="grid grid-cols-7 gap-2 mb-10"></div>
 
-                    <div id="slots" class="grid grid-cols-3 gap-3 mb-12"></div>
+                    <!-- Time Slots -->
+                    <div id="slots" class="grid grid-cols-3 gap-3 mb-10"></div>
 
+                    <!-- Client Info -->
                     <div class="space-y-4">
-                        <input type="text" id="name" placeholder="Full Name" class="w-full p-4 rounded-xl outline-none focus:border-[#D4AF37]">
+                        <input type="text" id="name" placeholder="Your Name" class="w-full p-4 rounded-xl outline-none focus:border-[#D4AF37]">
                         <input type="tel" id="phone" placeholder="Phone Number" class="w-full p-4 rounded-xl outline-none focus:border-[#D4AF37]">
-                        <button id="bookBtn" disabled onclick="handleBooking()" class="w-full py-5 bg-[#D4AF37] text-black font-bold uppercase tracking-widest rounded-xl disabled:opacity-20 transition-all hover:bg-white active:scale-95">
+                        <button id="bookBtn" disabled onclick="handleBooking()" class="w-full py-5 bg-[#D4AF37] text-black font-bold uppercase tracking-widest rounded-xl disabled:opacity-20 transition-all active:scale-95">
                             Confirm Appointment
                         </button>
                     </div>
@@ -136,12 +153,9 @@
     <!-- Footer -->
     <footer class="py-20 text-center border-t border-white/5">
         <div class="max-w-xs mx-auto">
-            <h3 class="serif text-2xl mb-4 tracking-widest">ABODI <span class="text-[#D4AF37]">BLENDZZ</span></h3>
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="https://www.instagram.com/abodiblendzz" target="_blank" class="text-white/40 hover:text-white transition text-[10px] uppercase tracking-widest">Instagram</a>
-            </div>
-            <p class="text-[9px] text-white/20 uppercase tracking-[0.5em] leading-loose cursor-pointer" onclick="document.getElementById('admin-modal').style.display='block'">
-                © 2025 ABODI BLENDZZ STUDIO<br>ESTABLISHED IN EXCELLENCE
+            <h3 class="serif text-2xl mb-4 tracking-widest uppercase">ABODI <span class="text-[#D4AF37]">BLENDZZ</span></h3>
+            <p id="admin-trigger" class="text-[9px] text-white/20 uppercase tracking-[0.5em] leading-loose cursor-pointer select-none">
+                © 2025 ABODI BLENDZZ STUDIO<br>STRICTLY BY APPOINTMENT
             </p>
         </div>
     </footer>
@@ -151,49 +165,60 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, where, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Variables
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'abodi-blendzz-site';
+        // Firebase Config
         const firebaseConfig = JSON.parse(__firebase_config);
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const appId = "abodi-blendzz-site";
 
         let currentView = new Date();
         let selectedDate = null;
         let selectedTime = null;
         const ADMIN_PASS = "SebSucks123";
 
-        // Auth Setup
-        onAuthStateChanged(auth, u => { if(u) renderCalendar(); else signInAnonymously(auth); });
-
-        // Working Hours configuration
-        const HOURS = { 1:{s:9,e:18}, 2:{s:9,e:18}, 3:{s:9,e:18}, 4:{s:9,e:20}, 5:{s:9,e:20}, 6:{s:10,e:16}, 0:null };
-
+        // Global functions for buttons
+        window.closeAdmin = () => { document.getElementById('admin-modal').style.display = 'none'; };
         window.changeMonth = (dir) => { 
             currentView.setMonth(currentView.getMonth() + dir); 
             renderCalendar(); 
-        }
+        };
+
+        // Admin Trigger
+        document.getElementById('admin-trigger').addEventListener('click', () => {
+            document.getElementById('admin-modal').style.display = 'block';
+        });
+
+        onAuthStateChanged(auth, u => { if(u) renderCalendar(); else signInAnonymously(auth); });
+
+        const HOURS = { 1:{s:9,e:18}, 2:{s:9,e:18}, 3:{s:9,e:18}, 4:{s:9,e:20}, 5:{s:9,e:20}, 6:{s:10,e:16}, 0:null };
 
         function renderCalendar() {
             const grid = document.getElementById('calendar'); grid.innerHTML = '';
             const y = currentView.getFullYear(), m = currentView.getMonth();
             document.getElementById('monthLabel').textContent = currentView.toLocaleDateString('en-US', {month:'long', year:'numeric'});
             
-            const first = new Date(y, m, 1).getDay(), total = new Date(y, m+1, 0).getDate();
+            const firstDayOfMonth = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m+1, 0).getDate();
             const today = new Date(); today.setHours(0,0,0,0);
 
-            for(let i=0; i<first; i++) grid.appendChild(document.createElement('div'));
-            for(let d=1; d<=total; d++) {
+            // Padding for empty days
+            for(let i=0; i<firstDayOfMonth; i++) {
+                const empty = document.createElement('div');
+                grid.appendChild(empty);
+            }
+
+            for(let d=1; d<=daysInMonth; d++) {
                 const dateObj = new Date(y, m, d);
-                const ds = dateObj.toISOString().split('T')[0];
+                const ds = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
                 const cell = document.createElement('div');
                 cell.textContent = d;
-                cell.className = 'aspect-square flex items-center justify-center rounded-xl border border-white/5 text-xs transition-all';
+                cell.className = 'day-cell';
                 
                 if(dateObj < today || !HOURS[dateObj.getDay()]) {
                     cell.classList.add('opacity-10', 'cursor-not-allowed');
                 } else {
-                    cell.classList.add('cursor-pointer', 'day-cell', 'hover:border-[#D4AF37]');
+                    cell.classList.add('cursor-pointer', 'hover:border-[#D4AF37]');
                     cell.onclick = () => {
                         document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('selected-day'));
                         cell.classList.add('selected-day');
@@ -238,7 +263,7 @@
             const btn = document.getElementById('bookBtn');
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            if(!name || !phone) { alert("Please enter details"); return; }
+            if(!name || !phone) return;
             
             btn.disabled = true;
             try {
@@ -250,6 +275,7 @@
                 document.getElementById('status').textContent = "BOOKING SUCCESSFUL";
                 document.getElementById('name').value = '';
                 document.getElementById('phone').value = '';
+                document.getElementById('slots').innerHTML = '';
             } catch(e) { btn.disabled = false; }
         }
 
@@ -258,26 +284,25 @@
                 document.getElementById('password-gate').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
                 loadAdmin();
-            } else { alert("Wrong Password"); }
+            }
         }
 
         function loadAdmin() {
             onSnapshot(query(collection(db,'artifacts',appId,'public','data','bookings')), snap => {
                 const list = document.getElementById('admin-bookings-list'); list.innerHTML = '';
                 const sorted = snap.docs.map(d => ({id:d.id, ...d.data()})).sort((a,b) => a.date.localeCompare(b.date));
-                if(sorted.length === 0) list.innerHTML = '<p class="opacity-20 text-center py-10">No bookings yet.</p>';
                 sorted.forEach(b => {
                     const div = document.createElement('div');
                     div.className = 'glass p-6 rounded-3xl flex justify-between items-center';
-                    div.innerHTML = `<div><p class="text-[#D4AF37] text-[10px] uppercase font-bold tracking-[0.2em] mb-1">${b.date} @ ${b.time}</p>
-                                    <p class="serif text-2xl font-bold">${b.name}</p>
-                                    <a href="tel:${b.phone}" class="text-sm text-white/40 hover:text-white transition font-mono">${b.phone}</a></div>
-                                    <button onclick="deleteBooking('${b.id}')" class="text-red-900 hover:text-red-500 transition-colors text-[10px] font-bold px-4 py-2 bg-white/5 rounded-lg">DELETE</button>`;
+                    div.innerHTML = `<div><p class="text-[#D4AF37] text-[10px] uppercase font-bold tracking-widest mb-1">${b.date} @ ${b.time}</p>
+                                    <p class="serif text-xl font-bold">${b.name}</p>
+                                    <p class="text-sm opacity-40">${b.phone}</p></div>
+                                    <button onclick="deleteBooking('${b.id}')" class="text-red-900 text-[10px] font-bold">DELETE</button>`;
                     list.appendChild(div);
                 });
             });
         }
-        window.deleteBooking = async (id) => { if(confirm('Cancel this appointment?')) await deleteDoc(doc(db,'artifacts',appId,'public','data','bookings',id)); }
+        window.deleteBooking = async (id) => { if(confirm('Delete booking?')) await deleteDoc(doc(db,'artifacts',appId,'public','data','bookings',id)); }
     </script>
 </body>
 </html>
